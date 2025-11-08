@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document Clustering</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 30px;
+      background-color: #f4f4f9;
+    }
+    h1 {
+      color: #333;
+    }
+    button {
+      padding: 10px 20px;
+      margin: 10px;
+      border: none;
+      background-color: #007bff;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    #output {
+      margin-top: 20px;
+      white-space: pre-wrap;
+      background: white;
+      padding: 10px;
+      border-radius: 6px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+    }
+  </style>
+</head>
+<body>
+  <h1>Document Clustering</h1>
+
+  <input type="file" id="fileInput" multiple />
+  <br />
+  <button onclick="uploadFiles()">Upload</button>
+  <button onclick="getClusters()">Get Clusters</button>
+
+  <div id="output"></div>
+
+  <script>
+    async function uploadFiles() {
+      const files = document.getElementById("fileInput").files;
+      const formData = new FormData();
+      for (let file of files) {
+        formData.append("files", file);
+      }
+
+      const res = await fetch("http://127.0.0.1:5000/upload", {
+        method: "POST",
+        body: formData,
+      });
+      document.getElementById("output").textContent = await res.text();
+    }
+
+    async function getClusters() {
+      const res = await fetch("http://127.0.0.1:5000/cluster");
+      document.getElementById("output").textContent = await res.text();
+    }
+  </script>
+</body>
+</html>
